@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:weather_app/screens/models/weather_response_model.dart';
 
 class NetworkFunctions {
+
   getApi({required String url, required Map<String, dynamic> parameters}) async {
     final dioVar = dio.Dio();
 
@@ -14,7 +15,6 @@ class NetworkFunctions {
     print('Response status: ${response.statusCode}');
     print('Response data: ${response.data}');
 
-    // return allLocationResponseModelFromJson(jsonEncode(response.data));
   }
 
   Future<WeatherResponseModel> getWeatherApi({lat,long}) async {
@@ -38,7 +38,6 @@ class NetworkFunctions {
     print('Response data: ${response.data}');
 
     return weatherResponseModelFromJson(jsonEncode(response.data));
-    // return allLocationResponseModelFromJson(jsonEncode(response.data));
   }
 
   Future<http.Response> postApi({required String url, required Map body}) async {

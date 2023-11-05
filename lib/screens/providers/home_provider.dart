@@ -4,22 +4,25 @@ import 'package:weather_app/screens/models/weather_response_model.dart';
 import 'package:weather_app/services/network_functions.dart';
 
 class HomeProvider extends ChangeNotifier {
-
   String locationPermission = '';
 
   String currentCityLong = '';
   String currentCityLat = '';
 
   String _currentCity = '';
+
   String? get currentCity => _currentCity;
 
   String _currentDate = '';
+
   String? get currentDate => _currentDate;
 
   String _currentTemp = '';
+
   String? get currentTemp => _currentTemp;
 
   WeatherResponseModel? _weatherForecast = WeatherResponseModel();
+
   WeatherResponseModel? get weatherForecast => _weatherForecast;
 
   HomeProvider() {
@@ -27,22 +30,26 @@ class HomeProvider extends ChangeNotifier {
   }
 
   void initialize() async {
-    Future.delayed(Duration(seconds: 3),() async {
-      await getLocation();
-    },);
+    Future.delayed(
+      Duration(seconds: 3),
+      () async {
+        await getLocation();
+      },
+    );
   }
 
   getWeather() async {
-    _weatherForecast = await NetworkFunctions().getWeatherApi(lat: currentCityLat,long: currentCityLong);
+    _weatherForecast = await NetworkFunctions().getWeatherApi(lat: currentCityLat, long: currentCityLong);
     if (_weatherForecast != null) {
       _currentDate = _weatherForecast!.location!.localtime!.split(' ').first;
-      _currentCity = _weatherForecast!.location!.region!;
+      _currentCity = _weatherForecast!.location!.name!;
       _currentTemp = '${_weatherForecast!.current!.tempC!} °C';
     }
     notifyListeners();
   }
 
-   getLocation() async {
+  getLocation() async {
+    notifyListeners();
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -65,7 +72,7 @@ class HomeProvider extends ChangeNotifier {
       return Future.error('Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    locationPermission = '';
+    locationPermission = 'granted';
     Position pos = await Geolocator.getCurrentPosition();
     currentCityLat = pos.latitude.toString();
     currentCityLong = pos.longitude.toString();
@@ -80,11 +87,13 @@ class HomeProvider extends ChangeNotifier {
       notifyListeners();
       return Future.error('Location permissions are permanently denied, we cannot request permissions.');
     }
+    locationPermission = '';
     getLocation();
   }
 
   void getLocationSetting() async {
     await Geolocator.openAppSettings();
+    locationPermission = '';
     getLocation();
   }
 }

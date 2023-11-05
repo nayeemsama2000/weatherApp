@@ -14,12 +14,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  @override
-  void initState() {
-    // TODO: implement initState
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +46,23 @@ class _HomeViewState extends State<HomeView> {
             Text('No Internet')
           ],
         ))),
+      );
+    }
+
+    if (homeProvider.locationPermission == '') {
+      return Scaffold(
+        body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/clouds.png",
+                  height: 200,
+                  width: 200,
+                ),
+                const CircularProgressIndicator()
+              ],
+            ))
       );
     }
 
@@ -123,11 +134,10 @@ class _HomeViewState extends State<HomeView> {
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
                             margin: const EdgeInsets.only(left: 20, right: 20),
-                            alignment: Alignment.topLeft,
                             child: Text(
                               homeProvider.currentCity!,
                               style: const TextStyle(fontSize: 35, height: 2),
@@ -135,7 +145,6 @@ class _HomeViewState extends State<HomeView> {
                           ),
                           Container(
                             margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                            alignment: Alignment.topLeft,
                             child: Text(
                               '${homeProvider.currentDate!} | Today',
                               style: TextStyle(fontSize: 14, color: Colors.grey[700], height: 1.5),

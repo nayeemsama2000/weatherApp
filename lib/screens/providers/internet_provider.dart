@@ -10,12 +10,13 @@ class InternetProvider extends ChangeNotifier {
   }
 
   Future checkInternetConnection() async {
-    var result = await Connectivity().checkConnectivity();
-    if (result == ConnectivityResult.none) {
-      _hasInternet = false;
+    Connectivity().onConnectivityChanged.listen((event) {
+      if(event.name == 'none'){
+        _hasInternet = false;
+      }else{
+        _hasInternet = true;
+      }
       notifyListeners();
-    } else {
-      _hasInternet = true;
-    }
+    });
   }
 }
